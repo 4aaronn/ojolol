@@ -39,431 +39,1038 @@ async function serveWebsite(req, res) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EON HUB | Advanced Roblox Script Hub</title>
-    <meta name="description" content="Eon Hub - Advanced Roblox script with Auto-Steal, Bypassing Noclip, and modern Acrylic UI">
-    <meta name="keywords" content="roblox, script, executor, hub, eon hub, auto steal, noclip">
+    <title>EON HUB | Advanced Roblox Script</title>
+    <meta name="description" content="Eon Hub - Modern Roblox script with advanced features">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        ${getCSS()}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00ffea;
+            --secondary: #9d00ff;
+            --accent: #ff0055;
+            --dark: #0a0a0f;
+            --darker: #07070c;
+            --light: #ffffff;
+            --gray: #8a8aa3;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .bg-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 234, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 234, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0) translateX(0); }
+            100% { transform: translateY(50px) translateX(50px); }
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            background: var(--gradient);
+            opacity: 0.03;
+            filter: blur(60px);
+            animation: float 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            top: -200px;
+            left: -200px;
+        }
+
+        .shape:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 500px;
+            height: 500px;
+            bottom: -250px;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(100px, 50px) rotate(120deg); }
+            66% { transform: translate(50px, 100px) rotate(240deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px var(--primary); }
+            50% { box-shadow: 0 0 40px var(--primary); }
+        }
+
+        .logo-icon i {
+            color: white;
+            font-size: 20px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .version {
+            font-size: 12px;
+            color: var(--gray);
+            margin-left: 10px;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav a:hover {
+            color: var(--light);
+        }
+
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            padding: 80px 0;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(0, 255, 234, 0.1);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 255, 234, 0.2);
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--light), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Buttons */
+        .buttons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid var(--gray);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Code Box */
+        .code-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 234, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .code-header {
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(0, 255, 234, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        .code-content {
+            padding: 25px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: var(--primary);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .code-footer {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            background: rgba(0, 255, 234, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(0, 255, 234, 0.2);
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-small:hover {
+            background: rgba(0, 255, 234, 0.2);
+        }
+
+        /* Terminal Preview */
+        .terminal-preview {
+            position: relative;
+        }
+
+        .terminal {
+            background: rgba(20, 20, 30, 0.8);
+            border: 1px solid rgba(0, 255, 234, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            animation: floatTerminal 6s ease-in-out infinite;
+        }
+
+        @keyframes floatTerminal {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .terminal-header {
+            padding: 15px 20px;
+            background: rgba(30, 30, 40, 0.9);
+            border-bottom: 1px solid rgba(0, 255, 234, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f57; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #28ca42; }
+
+        .terminal-body {
+            padding: 30px;
+        }
+
+        .ui-line {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .ui-label {
+            flex: 1;
+            color: var(--light);
+            font-size: 14px;
+        }
+
+        .ui-toggle {
+            width: 40px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .ui-toggle.active {
+            background: var(--gradient);
+        }
+
+        .ui-toggle::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        .ui-toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Features */
+        .features {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--light), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 60px;
+            font-size: 16px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 234, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 255, 234, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 255, 234, 0.1);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon i {
+            color: white;
+            font-size: 20px;
+        }
+
+        .feature h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--light);
+        }
+
+        .feature p {
+            color: var(--gray);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* How-to */
+        .how-to {
+            padding: 80px 0;
+        }
+
+        .steps {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--light);
+        }
+
+        .step-content p {
+            color: var(--gray);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .step-code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: var(--primary);
+            font-size: 13px;
+            margin-top: 10px;
+            border: 1px solid rgba(0, 255, 234, 0.1);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 60px 0 30px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo i {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .footer-logo span {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-link {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+        }
+
+        .footer-copyright {
+            color: var(--gray);
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .stats {
+                justify-content: center;
+            }
+            
+            .buttons {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .nav {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 40px;
+            }
+            
+            .section-title {
+                font-size: 32px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
     </style>
 </head>
 <body>
-    <!-- Background Animation -->
+    <!-- Background -->
     <div class="bg-animation">
-        <div class="gradient-circle circle-1"></div>
-        <div class="gradient-circle circle-2"></div>
-        <div class="gradient-circle circle-3"></div>
-        <div class="gradient-circle circle-4"></div>
+        <div class="bg-grid"></div>
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
     </div>
-    
-    <!-- Main Container -->
+
+    <!-- Container -->
     <div class="container">
         <!-- Header -->
         <header class="header">
             <div class="logo">
-                <i class="fas fa-infinity logo-icon"></i>
-                <h1>EON <span class="gradient-text">HUB</span></h1>
+                <div class="logo-icon">
+                    <i class="fas fa-infinity"></i>
+                </div>
+                <h1>EON HUB</h1>
                 <span class="version">v2.0</span>
             </div>
             <nav class="nav">
-                <a href="#features"><i class="fas fa-star"></i> Features</a>
-                <a href="#how-to"><i class="fas fa-code"></i> How to Use</a>
-                <a href="#faq"><i class="fas fa-question-circle"></i> FAQ</a>
-                <button id="copyBtn" class="btn-primary">
-                    <i class="fas fa-copy"></i> Copy Loadstring
-                </button>
+                <a href="#features">Features</a>
+                <a href="#how-to">How to Use</a>
+                <a href="#footer">Links</a>
             </nav>
-            <div class="mobile-toggle">
-                <i class="fas fa-bars"></i>
-            </div>
         </header>
 
-        <!-- Hero Section -->
+        <!-- Hero -->
         <section class="hero">
-            <div class="hero-content">
-                <div class="badge">
-                    <i class="fas fa-bolt"></i> <span>ADVANCED VERSION</span>
-                </div>
-                <h2 class="hero-title">Beyond <span class="gradient-text">Limits</span></h2>
-                <p class="hero-subtitle">The most advanced Roblox script hub with cutting-edge features and modern Acrylic UI</p>
+            <div class="hero-content fade-in">
+                <div class="hero-badge">ADVANCED VERSION</div>
+                <h1 class="hero-title">Modern Script Hub</h1>
+                <p class="hero-subtitle">Advanced Roblox automation with clean design and powerful features.</p>
                 
                 <div class="stats">
                     <div class="stat">
-                        <i class="fas fa-bolt"></i>
-                        <div>
-                            <h3>0ms</h3>
-                            <p>Instant Steal</p>
-                        </div>
+                        <div class="stat-number">0ms</div>
+                        <div class="stat-label">Auto Steal</div>
                     </div>
                     <div class="stat">
-                        <i class="fas fa-shield-alt"></i>
-                        <div>
-                            <h3>99%</h3>
-                            <p>Undetected</p>
-                        </div>
+                        <div class="stat-number">99%</div>
+                        <div class="stat-label">Undetected</div>
                     </div>
                     <div class="stat">
-                        <i class="fas fa-users"></i>
-                        <div>
-                            <h3>10K+</h3>
-                            <p>Users</p>
-                        </div>
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-label">Users</div>
                     </div>
                 </div>
                 
-                <div class="hero-buttons">
-                    <button id="executeBtn" class="btn-execute">
-                        <i class="fas fa-play"></i> Execute Script
+                <div class="buttons">
+                    <button class="btn btn-primary" onclick="copyLoadstring()">
+                        <i class="fas fa-copy"></i> Copy Loadstring
                     </button>
-                    <button id="copyLoadstring" class="btn-secondary">
-                        <i class="fas fa-code"></i> Get Loadstring
-                    </button>
-                    <button id="discordBtn" class="btn-discord">
-                        <i class="fab fa-discord"></i> Discord
+                    <button class="btn btn-secondary" onclick="executeScript()">
+                        <i class="fas fa-play"></i> Execute
                     </button>
                 </div>
                 
-                <div class="loadstring-box">
-                    <div class="loadstring-header">
-                        <i class="fas fa-terminal"></i>
-                        <span>Secure Loadstring</span>
-                        <span class="security-badge">
-                            <i class="fas fa-lock"></i> Executor Only
+                <div class="code-box">
+                    <div class="code-header">
+                        <div class="code-title">
+                            <i class="fas fa-code"></i>
+                            <span>Secure Loadstring</span>
+                        </div>
+                        <span style="color: var(--primary); font-size: 12px;">
+                            <i class="fas fa-lock"></i> Protected
                         </span>
                     </div>
-                    <div class="loadstring-content" id="loadstringUrl">
-                        ${req.headers.host ? `loadstring(game:HttpGet("https://${req.headers.host}/script"))()` : 'Loading...'}
+                    <div class="code-content" id="loadstring">
+                        loadstring(game:HttpGet("https://eon-hub.vercel.app/script"))()
                     </div>
-                    <div class="loadstring-footer">
-                        <button class="btn-copy-small" onclick="copyToClipboard()">
+                    <div class="code-footer">
+                        <button class="btn-small" onclick="copyLoadstring()">
                             <i class="fas fa-copy"></i> Copy
                         </button>
-                        <span class="copy-status" id="copyStatus"></span>
-                        <span class="security-note">
-                            <i class="fas fa-eye-slash"></i> Anti-View Protected
+                        <span style="color: var(--gray); font-size: 12px;">
+                            Executor access only
                         </span>
                     </div>
                 </div>
             </div>
             
-            <div class="hero-preview">
-                <div class="preview-container">
-                    <div class="preview-window">
-                        <div class="preview-header">
-                            <div class="preview-dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <span class="preview-title">EON HUB Interface</span>
-                            <span class="preview-badge">Acrylic UI</span>
+            <div class="terminal-preview fade-in delay-1">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="dot dot-red"></div>
+                            <div class="dot dot-yellow"></div>
+                            <div class="dot dot-green"></div>
                         </div>
-                        <div class="preview-content">
-                            <div class="ui-preview">
-                                <div class="ui-sidebar">
-                                    <div class="ui-section active">
-                                        <i class="fas fa-gem"></i> Auto Steal
-                                    </div>
-                                    <div class="ui-section">
-                                        <i class="fas fa-running"></i> Movement
-                                    </div>
-                                    <div class="ui-section">
-                                        <i class="fas fa-eye"></i> Visuals
-                                    </div>
-                                    <div class="ui-section">
-                                        <i class="fas fa-cog"></i> Settings
-                                    </div>
-                                </div>
-                                <div class="ui-main">
-                                    <div class="ui-feature">
-                                        <div class="ui-feature-header">
-                                            <i class="fas fa-bolt"></i>
-                                            <span>Instant Auto-Steal</span>
-                                        </div>
-                                        <div class="ui-toggle active">
-                                            <div class="toggle-switch"></div>
-                                            <span class="toggle-status">ACTIVE</span>
-                                        </div>
-                                    </div>
-                                    <div class="ui-feature">
-                                        <div class="ui-feature-header">
-                                            <i class="fas fa-ghost"></i>
-                                            <span>Bypassing Noclip</span>
-                                        </div>
-                                        <div class="ui-toggle">
-                                            <div class="toggle-switch"></div>
-                                            <span class="toggle-status">INACTIVE</span>
-                                        </div>
-                                    </div>
-                                    <div class="ui-slider-container">
-                                        <div class="ui-slider-label">
-                                            <i class="fas fa-tachometer-alt"></i>
-                                            <span>Speed Multiplier</span>
-                                            <span class="slider-value">2.5x</span>
-                                        </div>
-                                        <div class="ui-slider">
-                                            <div class="slider-track">
-                                                <div class="slider-thumb"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <span style="color: var(--light); font-size: 14px;">EON HUB UI</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="ui-line">
+                            <div class="ui-label">Instant Auto-Steal</div>
+                            <div class="ui-toggle active"></div>
+                        </div>
+                        <div class="ui-line">
+                            <div class="ui-label">Bypassing Noclip</div>
+                            <div class="ui-toggle"></div>
+                        </div>
+                        <div class="ui-line">
+                            <div class="ui-label">CFrame Speed</div>
+                            <div class="ui-toggle active"></div>
+                        </div>
+                        <div class="ui-line">
+                            <div class="ui-label">Acrylic UI</div>
+                            <div class="ui-toggle active"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Features Section -->
+        <!-- Features -->
         <section class="features" id="features">
-            <h2 class="section-title">Unlimited <span class="gradient-text">Features</span></h2>
-            <p class="section-subtitle">Advanced tools designed for maximum performance</p>
+            <h2 class="section-title">Features</h2>
+            <p class="section-subtitle">Powerful tools for enhanced gameplay</p>
             
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature fade-in delay-1">
                     <div class="feature-icon">
                         <i class="fas fa-bolt"></i>
                     </div>
-                    <h3>Instant Auto-Steal</h3>
-                    <p>Bypass all restrictions with 0ms hold duration and unlimited range.</p>
-                    <div class="feature-tags">
-                        <span class="tag">Smart Return</span>
-                        <span class="tag">Base System</span>
-                    </div>
+                    <h3>Auto-Steal</h3>
+                    <p>Instant item grabbing with 0ms delay and smart return system.</p>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature fade-in delay-2">
                     <div class="feature-icon">
                         <i class="fas fa-ghost"></i>
                     </div>
-                    <h3>Bypassing Noclip</h3>
-                    <p>Advanced collision bypass system with safe character handling.</p>
-                    <div class="feature-tags">
-                        <span class="tag">Physics Bypass</span>
-                        <span class="tag">Auto-Reconnect</span>
-                    </div>
+                    <h3>Bypass Noclip</h3>
+                    <p>Advanced collision bypass with safe character handling.</p>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature fade-in delay-3">
                     <div class="feature-icon">
                         <i class="fas fa-tachometer-alt"></i>
                     </div>
                     <h3>CFrame Speed</h3>
-                    <p>Enhanced movement using CFrame manipulation with adjustable multiplier.</p>
-                    <div class="feature-tags">
-                        <span class="tag">1-10x Speed</span>
-                        <span class="tag">Smooth Movement</span>
-                    </div>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h3>Acrylic UI</h3>
-                    <p>Modern interface with blur effects, smooth animations, and customization.</p>
-                    <div class="feature-tags">
-                        <span class="tag">Theme Support</span>
-                        <span class="tag">Mobile Ready</span>
-                    </div>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <h3>Smart Desync</h3>
-                    <p>Advanced network manipulation with normal and spam modes.</p>
-                    <div class="feature-tags">
-                        <span class="tag">Anti-Lag</span>
-                        <span class="tag">Flicker Mode</span>
-                    </div>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <h3>Config System</h3>
-                    <p>Save, load, and manage configurations with auto-save feature.</p>
-                    <div class="feature-tags">
-                        <span class="tag">Profiles</span>
-                        <span class="tag">Cloud Sync</span>
-                    </div>
+                    <p>Enhanced movement with adjustable speed multiplier.</p>
                 </div>
             </div>
         </section>
 
-        <!-- How to Use Section -->
+        <!-- How-to -->
         <section class="how-to" id="how-to">
-            <h2 class="section-title">Simple <span class="gradient-text">Execution</span></h2>
-            <p class="section-subtitle">Get started in just a few steps</p>
+            <h2 class="section-title">How to Use</h2>
+            <p class="section-subtitle">Simple steps to get started</p>
             
             <div class="steps">
-                <div class="step">
+                <div class="step fade-in">
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h3>Copy Loadstring</h3>
-                        <p>Click the "Copy Loadstring" button above to get the secure URL.</p>
+                        <p>Click the copy button above to get the script URL.</p>
+                        <div class="step-code">loadstring(game:HttpGet("URL"))()</div>
                     </div>
                 </div>
                 
-                <div class="step">
+                <div class="step fade-in delay-1">
                     <div class="step-number">2</div>
                     <div class="step-content">
                         <h3>Open Executor</h3>
-                        <p>Launch Roblox and open your executor (Synapse, Krnl, Fluxus, etc.).</p>
+                        <p>Launch Roblox and open your preferred executor.</p>
                     </div>
                 </div>
                 
-                <div class="step">
+                <div class="step fade-in delay-2">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h3>Execute Script</h3>
-                        <p>Paste the loadstring into your executor and press execute.</p>
-                        <div class="code-block">
-                            <code>loadstring(game:HttpGet("URL"))()</code>
-                        </div>
+                        <h3>Execute</h3>
+                        <p>Paste and run the loadstring in your executor.</p>
                     </div>
                 </div>
                 
-                <div class="step">
+                <div class="step fade-in delay-3">
                     <div class="step-number">4</div>
                     <div class="step-content">
-                        <h3>Enjoy Eon Hub</h3>
-                        <p>Press <kbd>RightControl</kbd> to toggle the UI and access all features!</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Executor Support -->
-        <section class="executors">
-            <h2 class="section-title">Supported <span class="gradient-text">Executors</span></h2>
-            <div class="executor-grid">
-                <div class="executor-card">
-                    <i class="fas fa-bolt"></i>
-                    <span>Synapse X</span>
-                </div>
-                <div class="executor-card">
-                    <i class="fas fa-cube"></i>
-                    <span>Krnl</span>
-                </div>
-                <div class="executor-card">
-                    <i class="fas fa-atom"></i>
-                    <span>Fluxus</span>
-                </div>
-                <div class="executor-card">
-                    <i class="fas fa-code"></i>
-                    <span>Script-Ware</span>
-                </div>
-                <div class="executor-card">
-                    <i class="fas fa-star"></i>
-                    <span>Oxygen U</span>
-                </div>
-                <div class="executor-card">
-                    <i class="fas fa-infinity"></i>
-                    <span>Comet</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ Section -->
-        <section class="faq" id="faq">
-            <h2 class="section-title">Common <span class="gradient-text">Questions</span></h2>
-            
-            <div class="faq-list">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>Is Eon Hub detected by anti-cheat?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Eon Hub uses advanced anti-detection methods and is regularly updated to stay undetected by most anti-cheat systems.</p>
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>Why can't I view the script in my browser?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>The script is protected with anti-view technology to prevent detection. It can only be accessed through supported executors.</p>
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>Is Eon Hub free to use?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Yes, Eon Hub is completely free with all features unlocked. No premium version or paywalls.</p>
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>Does it work on mobile?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Yes! The Acrylic UI is fully mobile-compatible and works with mobile executors.</p>
-                    </div>
-                </div>
-                
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>How often is Eon Hub updated?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Regular updates every 1-2 weeks with new features, bug fixes, and anti-detection improvements.</p>
+                        <h3>Enjoy</h3>
+                        <p>Press <strong>RightControl</strong> to toggle the UI.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <i class="fas fa-infinity"></i>
-                    <span>EON HUB</span>
-                </div>
-                <p class="footer-text">Beyond Limits, Beyond Time</p>
-                
-                <div class="footer-links">
-                    <a href="#" onclick="showModal('discord')"><i class="fab fa-discord"></i> Discord</a>
-                    <a href="#" onclick="showModal('github')"><i class="fab fa-github"></i> GitHub</a>
-                    <a href="#" onclick="showModal('telegram')"><i class="fab fa-telegram"></i> Telegram</a>
-                    <a href="#" onclick="showModal('youtube')"><i class="fab fa-youtube"></i> YouTube</a>
-                </div>
-                
-                <div class="footer-notes">
-                    <p class="copyright">© 2024 Eon Hub. All rights reserved.</p>
-                    <p class="disclaimer">This software is for educational purposes only. Use at your own risk.</p>
-                </div>
+        <footer class="footer" id="footer">
+            <div class="footer-logo">
+                <i class="fas fa-infinity"></i>
+                <span>EON HUB</span>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#" class="footer-link" onclick="alert('Discord coming soon!')">Discord</a>
+                <a href="#" class="footer-link" onclick="alert('GitHub coming soon!')">GitHub</a>
+                <a href="#" class="footer-link" onclick="executeScript()">Execute</a>
+            </div>
+            
+            <div class="footer-copyright">
+                © 2024 Eon Hub. For educational use.
             </div>
         </footer>
     </div>
 
-    <!-- Modal -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <div id="modal-body"></div>
-        </div>
-    </div>
-
-    <!-- Script -->
     <script>
-        ${getJavaScript(req.headers.host)}
+        // Copy loadstring to clipboard
+        function copyLoadstring() {
+            const text = document.getElementById('loadstring').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Loadstring copied!');
+            }).catch(err => {
+                showToast('Failed to copy');
+                console.error(err);
+            });
+        }
+
+        // Execute script modal
+        function executeScript() {
+            const loadstring = document.getElementById('loadstring').textContent;
+            const modal = `
+                <div style="
+                    background: rgba(20, 20, 30, 0.95);
+                    border: 1px solid rgba(0, 255, 234, 0.3);
+                    border-radius: 15px;
+                    padding: 30px;
+                    max-width: 500px;
+                    margin: 20px auto;
+                ">
+                    <h3 style="color: var(--primary); margin-bottom: 20px;">
+                        <i class="fas fa-terminal"></i> Execute Script
+                    </h3>
+                    <div style="
+                        background: rgba(0, 0, 0, 0.3);
+                        padding: 20px;
+                        border-radius: 10px;
+                        font-family: monospace;
+                        color: var(--primary);
+                        font-size: 14px;
+                        margin-bottom: 20px;
+                        word-break: break-all;
+                    ">
+                        ${loadstring}
+                    </div>
+                    <div style="display: flex; gap: 15px; justify-content: center;">
+                        <button onclick="copyLoadstring();" style="
+                            background: var(--gradient);
+                            color: white;
+                            border: none;
+                            padding: 12px 25px;
+                            border-radius: 10px;
+                            cursor: pointer;
+                            font-weight: 600;
+                        ">
+                            Copy & Close
+                        </button>
+                        <button onclick="closeModal();" style="
+                            background: transparent;
+                            color: var(--gray);
+                            border: 1px solid var(--gray);
+                            padding: 12px 25px;
+                            border-radius: 10px;
+                            cursor: pointer;
+                        ">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            const modalDiv = document.createElement('div');
+            modalDiv.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                backdrop-filter: blur(5px);
+            `;
+            modalDiv.innerHTML = modal;
+            
+            modalDiv.onclick = function(e) {
+                if (e.target === modalDiv) {
+                    document.body.removeChild(modalDiv);
+                }
+            };
+            
+            document.body.appendChild(modalDiv);
+        }
+
+        function closeModal() {
+            const modal = document.querySelector('[style*="position: fixed"]');
+            if (modal) document.body.removeChild(modal);
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--gradient);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                z-index: 1000;
+                font-weight: 500;
+                animation: slideUp 0.3s ease;
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideDown 0.3s ease';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 2000);
+        }
+
+        // Add animations on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Observe all features and steps
+        document.querySelectorAll('.feature, .step').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Auto-animate terminal toggles
+        setInterval(() => {
+            const toggles = document.querySelectorAll('.ui-toggle');
+            toggles.forEach(toggle => {
+                toggle.classList.toggle('active');
+            });
+        }, 3000);
     </script>
 </body>
 </html>`;
