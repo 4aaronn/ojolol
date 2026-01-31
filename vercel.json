@@ -1,0 +1,32 @@
+{
+  "functions": {
+    "api/script.js": {
+      "maxDuration": 10
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/script",
+      "destination": "/api/script"
+    },
+    {
+      "source": "/get",
+      "destination": "/api/script"
+    }
+  ]
+}
