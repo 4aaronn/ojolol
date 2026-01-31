@@ -1,7 +1,7 @@
 {
   "name": "eon-hub",
   "version": "2.0.0",
-  "description": "Eon Hub - Advanced Roblox Script Hub",
+  "description": "Eon Hub - Modern Roblox Script Hub",
   "main": "api/script.js",
   "scripts": {
     "dev": "vercel dev",
