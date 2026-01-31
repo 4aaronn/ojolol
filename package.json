@@ -1,0 +1,18 @@
+{
+  "name": "eon-hub",
+  "version": "2.0.0",
+  "description": "Eon Hub - Advanced Roblox Script Hub",
+  "main": "api/script.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel start",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@vercel/node": "^2.15.0"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "license": "MIT"
+}
