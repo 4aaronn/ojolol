@@ -4,28 +4,21 @@
       "maxDuration": 10
     }
   },
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        },
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    }
-  ],
   "rewrites": [
+    {
+      "source": "/",
+      "destination": "/api/script"
+    },
     {
       "source": "/script",
       "destination": "/api/script"
     },
     {
-      "source": "/get",
+      "source": "/style.css",
+      "destination": "/api/script"
+    },
+    {
+      "source": "/app.js",
       "destination": "/api/script"
     }
   ]
